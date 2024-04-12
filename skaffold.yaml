@@ -1,0 +1,14 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: discord-sepio
+build:
+  artifacts:
+  - image: 560914023379.dkr.ecr.us-east-2.amazonaws.com/discord-sepio
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kubectl:
+    defaultNamespace: netsepio
+    manifests:
+    - k8s/sepio-deploy.yml
