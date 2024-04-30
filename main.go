@@ -64,14 +64,13 @@ func Validator(update tgbotapi.Update) {
 			}
 		}
 
-		if siteSafety != "" {
+		if siteSafety != "" && siteSafety != "Safe" {
 			message = fmt.Sprintf("The link %s is classified as %s", url, siteSafety)
-		}
-
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, message)
-		_, err = Bot.Send(msg)
-		if err != nil {
-			fmt.Println("Error sending message:", err)
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, message)
+			_, err := Bot.Send(msg)
+			if err != nil {
+				fmt.Println("Error sending message:", err)
+			}
 		}
 	}
 }
