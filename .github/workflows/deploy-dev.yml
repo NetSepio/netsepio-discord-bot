@@ -21,12 +21,13 @@ jobs:
         username: ${{ secrets.GHCR_USERNAME }}
         password: ${{ secrets.GHCR_TOKEN }}
     
-    - name: Build and Push Docker Docker Image
+    - name: Build and Push Docker Image
       run: |
+        export REPO_NAME=$(echo $GITHUB_REPOSITORY | tr '[:upper:]' '[:lower:]')
         export CURRENT_BRANCH=${GITHUB_REF#refs/heads/}
         export TAG=$([[ $CURRENT_BRANCH == $(basename ${{ github.ref }}) ]] && echo $CURRENT_BRANCH || echo "latest")
-        export GITHUB_REF_IMAGE=ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA
-        export GITHUB_BRANCH_IMAGE=ghcr.io/$GITHUB_REPOSITORY:$TAG
+        export GITHUB_REF_IMAGE=ghcr.io/$REPO_NAME:$GITHUB_SHA
+        export GITHUB_BRANCH_IMAGE=ghcr.io/$REPO_NAME:$TAG
         docker build -t $GITHUB_REF_IMAGE -t $GITHUB_BRANCH_IMAGE .
         echo "Pushing Image to GitHub Container Registry"
         docker push $GITHUB_REF_IMAGE
