@@ -3,9 +3,7 @@ name: "Build and Push to GHCR"
 on:
   push:
     branches: 
-      - staging
       - main
-      - prod
 
 jobs:
 
@@ -23,7 +21,7 @@ jobs:
         username: ${{ secrets.GHCR_USERNAME }}
         password: ${{ secrets.GHCR_TOKEN }}
     
-    - name: Build and Push Docker Image
+    - name: Build and Push Docker Docker Image
       run: |
         export CURRENT_BRANCH=${GITHUB_REF#refs/heads/}
         export TAG=$([[ $CURRENT_BRANCH == $(basename ${{ github.ref }}) ]] && echo $CURRENT_BRANCH || echo "latest")
@@ -33,24 +31,8 @@ jobs:
         echo "Pushing Image to GitHub Container Registry"
         docker push $GITHUB_REF_IMAGE
         docker push $GITHUB_BRANCH_IMAGE
-    
-    - name: Deploy on STG server 
-      if: github.ref == 'refs/heads/staging' 
-      uses: appleboy/ssh-action@v0.1.7
-      with:         
-        host: ${{ secrets.STG_REMOTE_SERVER_ADDRESS }}
-        username: ${{ secrets.STG_SERVER_USERNAME }}
-        key:  ${{ secrets.STG_REMOTE_SERVER_KEY }}
-        port: ${{ secrets.STG_SSH_PORT }}
-        script: |
-          pwd
-          cd platform
-          sudo podman stop platform && sudo podman rm platform && sudo podman image rm platform
-          echo ${{ secrets.GHCR_TOKEN }} | podman login ghcr.io -u secrets.GHCR_USERNAME --password-stdin
-          sudo podman pull ghcr.io/weareflexable/platform:staging
-          sudo podman run --name="platform" --env-file=.env -p 9079:8080 --net=bridge -d ghcr.io/weareflexable/platform:staging
-    
-    - name: Deploy on DEV server 
+
+    - name: Deploy Docker on DEV server 
       if: github.ref == 'refs/heads/main' 
       uses: appleboy/ssh-action@v0.1.7
       with:         
@@ -60,24 +42,8 @@ jobs:
         port: ${{ secrets.DEV_SSH_PORT }} 
         script: |
           pwd
-          cd platform
-          sudo podman stop platform && sudo podman rm platform && sudo podman image rm platform
-          echo ${{ secrets.GHCR_TOKEN }} | sudo podman login ghcr.io -u secrets.GHCR_USERNAME --password-stdin
-          sudo podman pull ghcr.io/weareflexable/platform:main
-          sudo podman run --name="platform" --env-file=.env -p 9079:8080 --net=bridge -d ghcr.io/weareflexable/platform:main
-
-    - name: Deploy on PROD server 
-      if: github.ref == 'refs/heads/prod' 
-      uses: appleboy/ssh-action@v0.1.7
-      with:         
-        host: ${{ secrets.PROD_REMOTE_SERVER_ADDRESS }}
-        username: ${{ secrets.PROD_SERVER_USERNAME }}
-        key:  ${{ secrets.PROD_REMOTE_SERVER_KEY }}
-        port: ${{ secrets.PROD_SSH_PORT }} 
-        script: |
-          pwd
-          cd platform
-          sudo podman stop platform && sudo podman rm platform && sudo podman image rm platform
-          echo ${{ secrets.GHCR_TOKEN }} | podman login ghcr.io -u secrets.GHCR_USERNAME --password-stdin
-          sudo podman pull ghcr.io/weareflexable/platform:prod
-          sudo podman run --name="platform" --env-file=.env -p 9080:8080 --net=bridge -d ghcr.io/weareflexable/platform:prod    
+          cd discord_bot
+          sudo docker stop platform && sudo docker rm platform && sudo docker image rm platform
+          echo ${{ secrets.GHCR_TOKEN }} | sudo docker login ghcr.io -u secrets.GHCR_USERNAME --password-stdin
+          sudo docker pull ghcr.io/weareflexable/platform:main
+          sudo docker run --name="platform" --env-file=.env -p 9079:8080 --net=bridge -d ghcr.io/weareflexable/platform:main
