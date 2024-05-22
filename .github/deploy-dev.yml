@@ -43,7 +43,7 @@ jobs:
         script: |
           pwd
           cd discord_bot
-          sudo docker stop platform && sudo docker rm platform && sudo docker image rm platform
+          sudo docker stop netsepio-discord-bot && sudo docker rm netsepio-discord-bot && sudo docker image rm netsepio-discord-bot
           echo ${{ secrets.GHCR_TOKEN }} | sudo docker login ghcr.io -u secrets.GHCR_USERNAME --password-stdin
-          sudo docker pull ghcr.io/weareflexable/platform:main
-          sudo docker run --name="platform" --env-file=.env -p 9079:8080 --net=bridge -d ghcr.io/weareflexable/platform:main
+          sudo docker pull ghcr.io/NetSepio/netsepio-discord-bot:main
+          sudo docker run --name="netsepio-discord-bot" --env-file=.env -p 9079:8080 --net=bridge -d ghcr.io/NetSepio/netsepio-discord-bot:main
