@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"regexp"
@@ -80,7 +81,7 @@ func Start() {
 	var err error
 	Bot, err = tgbotapi.NewBotAPI(os.Getenv("TelegramToken"))
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return
 	} else {
 		fmt.Println("Bot started")
