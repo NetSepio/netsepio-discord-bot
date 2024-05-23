@@ -103,7 +103,7 @@ jobs:
           port: ${{ secrets.DEV_SSH_PORT }} 
           script: |
             pwd
-            cd telegram_bot
+            cd telegram
             sudo docker stop netsepio-telegram-bot && sudo docker rm netsepio-telegram-bot && sudo docker image rm ghcr.io/netsepio/netsepio-discord-bot:telegram_bot
             echo ${{ secrets.GHCR_TOKEN }} | sudo docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
             sudo docker pull ghcr.io/netsepio/netsepio-discord-bot:telegram_bot
