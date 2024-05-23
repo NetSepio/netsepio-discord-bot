@@ -18,7 +18,7 @@ COPY . .
 # EXPOSE 8080
 
 # Define environment variable for the path to .env file.
-ENV NODE_ENV=production
+# ENV NODE_ENV=production
 
 # Command to run the application.
 CMD ["node", "index.js"]
