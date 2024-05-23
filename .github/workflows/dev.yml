@@ -77,4 +77,4 @@ jobs:
             sudo docker stop netsepio-twitter-bot && sudo docker rm netsepio-twitter-bot && sudo docker image rm ghcr.io/netsepio/netsepio-discord-bot:twitter_bot
             echo ${{ secrets.GHCR_TOKEN }} | sudo docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
             sudo docker pull ghcr.io/netsepio/netsepio-discord-bot:twitter_bot
-            sudo docker run --name="netsepio-twitter-bot" --env-file=.env -p 9079:8080 --net=bridge -d ghcr.io/netsepio/netsepio-discord-bot:twitter_bot
+            sudo docker run --name="netsepio-twitter-bot" --env-file=.env -p 9080:8080 --net=bridge -d ghcr.io/netsepio/netsepio-discord-bot:twitter_bot
