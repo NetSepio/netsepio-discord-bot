@@ -82,6 +82,8 @@ func Start() {
 	if err != nil {
 		fmt.Println(err)
 		return
+	} else {
+		fmt.Println("Bot started")
 	}
 
 	u := tgbotapi.NewUpdate(0)
